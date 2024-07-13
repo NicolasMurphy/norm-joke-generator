@@ -1,17 +1,16 @@
-import pandas as pd
-from transformers import GPT2LMHeadModel, GPT2Tokenizer, Trainer, TrainingArguments, TextDataset, DataCollatorForLanguageModeling
+from transformers import (
+    GPT2LMHeadModel,
+    GPT2Tokenizer,
+    Trainer,
+    TrainingArguments,
+    TextDataset,
+    DataCollatorForLanguageModeling,
+)
 
-jokes_df = pd.read_csv('jokes.csv', header=None)
-
-jokes = jokes_df.iloc[:, 0].tolist()
-
-with open('jokes.txt', 'w', encoding='utf-8', errors='ignore') as f:
-    for joke in jokes:
-        f.write(joke + '\n')
-
-model_name = 'gpt2'
+model_name = "gpt2"
 tokenizer = GPT2Tokenizer.from_pretrained(model_name)
 model = GPT2LMHeadModel.from_pretrained(model_name)
+
 
 def load_dataset(file_path, tokenizer):
     return TextDataset(
@@ -20,7 +19,8 @@ def load_dataset(file_path, tokenizer):
         block_size=128,
     )
 
-train_dataset = load_dataset('jokes.txt', tokenizer)
+
+train_dataset = load_dataset("jokes.txt", tokenizer)
 
 data_collator = DataCollatorForLanguageModeling(
     tokenizer=tokenizer,
@@ -28,7 +28,7 @@ data_collator = DataCollatorForLanguageModeling(
 )
 
 training_args = TrainingArguments(
-    output_dir='./results',
+    output_dir="./results",
     overwrite_output_dir=True,
     num_train_epochs=5,
     per_device_train_batch_size=4,
@@ -45,5 +45,5 @@ trainer = Trainer(
 
 trainer.train()
 
-model.save_pretrained('./fine-tuned-gpt2-jokes')
-tokenizer.save_pretrained('./fine-tuned-gpt2-jokes')
+model.save_pretrained("./fine-tuned-gpt2-jokes")
+tokenizer.save_pretrained("./fine-tuned-gpt2-jokes")
