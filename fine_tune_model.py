@@ -30,10 +30,13 @@ data_collator = DataCollatorForLanguageModeling(
 training_args = TrainingArguments(
     output_dir="./results",
     overwrite_output_dir=True,
-    num_train_epochs=5,
+    num_train_epochs=10,
     per_device_train_batch_size=4,
-    save_steps=10_000,
-    save_total_limit=2,
+    learning_rate=5e-5,
+    save_steps=1000,
+    save_total_limit=3,
+    logging_dir="./logs",
+    logging_steps=100,
 )
 
 trainer = Trainer(
